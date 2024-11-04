@@ -1,12 +1,11 @@
 Train:
   epoches: 
   weights: 
-  # weights:
   optim: 
   base_lr:  
-  if_train_query_encoder_textFeatureEncoder: True
+  if_train_query_encoder_textFeatureEncoder: 
   inter_pred_th: 
-  device_ids: [0]
+  device_ids: 
   loss_gamma:
     loss_start: 
     loss_end: 
@@ -18,12 +17,10 @@ DataSet:
   train_ann_data_path: 
   eval_ann_data_path: 
   text_encoder_root: 
-  # text_encoder_root: '/data2/liangxiaoyuan_data/NLP_models/bert-large-uncased'
   batch_size: 
 Model:
   text_feature_dim: 
   video_feature_dim: 
   use_inter_pred: 
-  # use_inter_pred: False
 Logs_dir: 
 save_dir: 
