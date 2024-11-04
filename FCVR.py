@@ -26,15 +26,12 @@ class AdditiveAttention(nn.Module):
 class QueryEncoder(nn.Module):
     def __init__(self,text_encoder_path,text_feature_dim) -> None:
         super().__init__()
-        # 文本编码
         self.encoder=AutoModel.from_pretrained(text_encoder_path)
-        # FFN
         self.ffn=nn.Sequential(
             nn.Linear(768,512),
             nn.Mish(),
             nn.Linear(512,text_feature_dim),
             nn.Mish(),
-            nn.Dropout()#我加的
             )
         # transformer_encoder
         transformer_layer=nn.TransformerEncoderLayer(d_model=text_feature_dim,nhead=4,batch_first=True)
@@ -50,10 +47,8 @@ class QueryEncoder(nn.Module):
 class VideoEncoder(nn.Module):
     def __init__(self,video_feature_dim) -> None:
         super().__init__()
-        # FFN
         self.ffn=nn.Sequential(
             nn.Linear(1024,512),
-            nn.Dropout(),#我加的
             nn.Mish(),
             nn.Linear(512,video_feature_dim),
             nn.Mish()
@@ -129,11 +124,9 @@ class Frames_Simlarity(nn.Module):
         for now_video,roi_start,roi_end,length in zip(all_feature,sample['feature_start'],sample['feature_end'],sample['video_feature_length']):
             roi_start,roi_end,length=int(roi_start),int(roi_end),int(length)
             roi_feature=now_video[roi_start:roi_end,:]
-            # 在后面取
             if length-roi_end>(roi_end-roi_start)+1:
                 other_start=random.randint(roi_end+1,length-(roi_end-roi_start)-1)
                 other_end=other_start+(roi_end-roi_start)
-            # 在前面取
             elif roi_start-1>(roi_end-roi_start)+1:
                 other_end=random.randint(roi_start-1-(roi_end-roi_start),roi_start-1)
                 other_start=other_end-(roi_end-roi_start)
@@ -158,29 +151,29 @@ class FCVR(nn.Module):
         super().__init__()
         self.args=args
         text_encoder_root=self.args['DataSet']['text_encoder_root']
-        # Query Encoder模块
+        
         self.query_encoder=QueryEncoder(text_encoder_root,text_feature_dim)
-        # Video Encoder模块
+        
         self.vedio_encoder=VideoEncoder(video_feature_dim)
-        # Moment Localization模块
+        
         self.moment_localization=MomentLocalization()
-        # 目标帧与普通帧对比模块
+        
         self.get_simlarity=Frames_Simlarity()
-        # internal frame predictor
+        
         if self.args['Model']['use_inter_pred']:
             self.inter_predictor=InterPredictor()
 
 
     def forward(self,sample):
-        # QueryEncoder
+       
         Qv=self.query_encoder(sample['tokens_id'])
-        # VideoEncoder
+        
         Hv=self.vedio_encoder(sample['cur_feature'])
-        # Moment Localization 
+         
         P_start,P_end=self.moment_localization(Qv,Hv)
-        # 目标帧特征与普通特征相似度计算
+        
         similarity_score=self.get_simlarity(sample)
-        # inter frame pred
+        
         if self.args['Model']['use_inter_pred']:
             inter_pred_out=self.inter_predictor(Qv,Hv)
             return P_start,P_end,inter_pred_out,similarity_score
