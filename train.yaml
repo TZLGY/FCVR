@@ -2,7 +2,7 @@ Train:
   epoches: 
   weights: 
   # weights:
-  optim: AdamW # SGD ASGD Rprop Adagrad Adadelta RMSprop Adam Adamax AdamW
+  optim: 
   base_lr:  
   if_train_query_encoder_textFeatureEncoder: True
   inter_pred_th: 
