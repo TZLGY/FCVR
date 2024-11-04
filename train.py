@@ -1,5 +1,5 @@
-from RELO_dataset import bulid_loader
-from ReLoCLNet_model import ReLoCLNet
+from FCVR_dataset import bulid_loader
+from FCVR import FCVR
 import yaml,torch,argparse
 from torch import optim,nn
 from tqdm import tqdm
@@ -112,7 +112,7 @@ def sample2cuda(sample,device_ids):
                 sample[k][kk]=sample[k][kk].cuda(device_ids[0])
     return sample
 def display_yaml_file(file_path):
-    with open(file_path, 'r',encoding='utf-8') as file:#encoding='utf-8'为了在windows上运行
+    with open(file_path, 'r') as file:
         data = yaml.safe_load(file)
         print(yaml.dump(data, default_flow_style=False, sort_keys=False))
 def main(args):
