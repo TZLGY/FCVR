@@ -3,7 +3,7 @@ from torch.utils.data import Dataset,DataLoader
 import pandas as pd
 from transformers import AutoTokenizer
 from tqdm import tqdm
-class RELO_DataSet(Dataset):
+class FCVR(Dataset):
     def __init__(self,Vedio_features,ann_data,text_encoder):
         super().__init__()
         self.Vedio_features=Vedio_features
