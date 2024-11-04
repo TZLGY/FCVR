@@ -55,8 +55,8 @@ def train(model,epoches,train_loader,eval_loader,opt,loss_func,lr_drop,device_id
             val_loss=sum(val_loss)/len(val_loss)
             if val_iou>best_iou:
                 best_iou=val_iou
-                torch.save(model.state_dict(),f"{save_dir}/best_charades_sts.pt") #最佳模型
-            torch.save(model.state_dict(),f"{save_dir}/last_charades_sts.pt") #最差模型
+                torch.save(model.state_dict(),f"{save_dir}/best_charades_sts.pt") 
+            torch.save(model.state_dict(),f"{save_dir}/last_charades_sts.pt") 
         logs_writer.add_scalar(tag='eval_iou_epoch',scalar_value=train_iou,global_step=epoch)
         logs_writer.add_scalar(tag='train_iou_epoch',scalar_value=val_iou,global_step=epoch)
 
@@ -79,18 +79,15 @@ def batch_iou_loss(lines1, lines2):
 def cal_loss(P_start,G_start,P_end,G_end,loss_func,inter_pred_out=None,device_ids=None,inter_pred_th=0.5,similarity_score=None,loss_gamma=None):
     loss_start=loss_func(G_start,P_start)
     loss_end=loss_func(G_end,P_end)
-    # 计算IOU loss
     P_line=torch.concatenate((P_start.view(-1,1),P_end.view(-1,1)),dim=-1)
     G_line=torch.concatenate((G_start.view(-1,1),G_end.view(-1,1)),dim=-1)
     iou_loss,iou,iou_list=batch_iou_loss(P_line,G_line)
-    # 计算相似度loss
     if str(similarity_score)!='None':
         b=similarity_score.shape[0]
         similarity_label=torch.zeros((b)).to(similarity_score.device)
         similarity_loss=nn.MSELoss()(similarity_score,similarity_label)
     else:
         similarity_loss=0
-    # 计算内部帧loss
     if str(inter_pred_out)!='None':
         labels=[]
         for now_iou in iou_list:
@@ -138,9 +135,7 @@ def main(args):
     loss_gamma=args['Train']['loss_gamma']
     lr_drop=optim.lr_scheduler.StepLR(opt,step_size=10,gamma=0.1)
     loss_func=nn.MSELoss()
-    # 判断是否多卡
     device_ids=args['Train']['device_ids']
-    # 预训练权重
     if args['Train']['weights']:
         print(f"load weights from {args['Train']['weights']}")
         print(model.load_state_dict(torch.load(args['Train']['weights']),strict=False))
