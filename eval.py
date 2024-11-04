@@ -1,6 +1,6 @@
-from RELO_dataset import bulid_loader
+from FCVR_dataset import bulid_loader
 #from data_tacos import bulid_loader
-from ReLoCLNet_model import ReLoCLNet
+from FCVR_model import ReLoCLNet
 import yaml,torch,argparse,time
 from tqdm import tqdm
 import numpy as np
