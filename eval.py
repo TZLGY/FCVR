@@ -1,5 +1,5 @@
 from FCVR_dataset import bulid_loader
-#from data_tacos import bulid_loader
+
 from FCVR_model import FCVR
 import yaml,torch,argparse,time
 from tqdm import tqdm
@@ -42,7 +42,7 @@ def batch_iou_loss(lines1, lines2):
     
     return iou
 def cal_met(P_start,G_start,P_end,G_end,):
-    # 计算IOU
+    
     P_line=torch.concatenate((P_start.view(-1,1),P_end.view(-1,1)),dim=-1)
     G_line=torch.concatenate((G_start.view(-1,1),G_end.view(-1,1)),dim=-1)
     iou=batch_iou_loss(P_line,G_line)
@@ -86,9 +86,9 @@ def main(args):
 
 
     
-    start_time_train = time.time()  # 开始计时训练集
+    start_time_train = time.time() 
     met_table, cost_time_ms = eval_model(model, train_loader, device_ids)
-    total_time_train = time.time() - start_time_train  # 结束计时训练集
+    total_time_train = time.time() - start_time_train  
 
 
     
@@ -100,9 +100,9 @@ def main(args):
 
 
 
-    start_time_eval = time.time()  # 开始计时测试集
+    start_time_eval = time.time()  
     met_table, cost_time_ms = eval_model(model, eval_loader, device_ids)
-    total_time_eval = time.time() - start_time_eval  # 结束计时测试集
+    total_time_eval = time.time() - start_time_eval  
 
 
 
