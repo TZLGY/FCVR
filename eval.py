@@ -61,7 +61,7 @@ def display_yaml_file(file_path):
         print(yaml.dump(data, default_flow_style=False, sort_keys=False))
 def main(args):
     # display_yaml_file(args.config_file)
-    with open(args.config_file, 'r', encoding='utf-8') as f:
+    with open(args.config_file, 'r' as f:
         args = yaml.load(f.read(), Loader=yaml.FullLoader)
     
     Vedio_feature_path=args['DataSet']['Vedio_feature_path']
