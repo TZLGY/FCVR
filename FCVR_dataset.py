@@ -59,11 +59,11 @@ def bulid_loader(Vedio_feature_path,train_ann_data_path,eval_ann_data_path,text_
     return train_loader,eval_loader
 
 if __name__=='__main__':
-    Vedio_feature_path='/data2/liangxiaoyuan_data/Video_dataset/final_dataset/charades_sts.pt'
-    train_ann_data_path='/data2/liangxiaoyuan_data/Video_dataset/final_dataset/charades_sta_train_tokens.csv'
-    eval_ann_data_path='/data2/liangxiaoyuan_data/Video_dataset/final_dataset/charades_sta_test_tokens.csv'
-    text_encoder_root='/data2/liangxiaoyuan_data/NLP_models/gpt2-medium'
-    batch_size=16
+    Vedio_feature_path=
+    train_ann_data_path=
+    eval_ann_data_path=
+    text_encoder_root=
+    batch_size=
     train_loader,eval_loader=bulid_loader(Vedio_feature_path,train_ann_data_path,eval_ann_data_path,text_encoder_root,batch_size)
     for sample in train_loader:
         for k in sample:
