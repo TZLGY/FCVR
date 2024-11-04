@@ -21,12 +21,10 @@ class FCVR(Dataset):
             sample[k]=v
         cur_feature=self.Vedio_features[sample['video']]
   
-        # 完整的视频特征 补长到560
         sample['video_feature_length']=len(cur_feature)
         pad_feature=torch.zeros((560,1024))
         pad_feature[:len(cur_feature),:]=cur_feature
         sample['all_video_feature']=pad_feature
-        # 求和后的视频总特征
         cur_feature=torch.sum(cur_feature,dim=0)
 
         tokens=eval(sample['tokens'])
@@ -35,19 +33,19 @@ class FCVR(Dataset):
         tokens_id=self.text_encoder(tokens,is_split_into_words=True,padding='max_length',max_length=20,truncation=True)#,return_tensors='pt'
         sample['tokens_id']={k:torch.tensor(v) for k,v in tokens_id.items()}
         sample['cur_feature']=cur_feature
-        # 时间归一化
+    
         total_time=sample['number_frames']/sample['fps']
         sample['time_start']=(sample['time_start']/total_time).view(1)
         sample['time_end']=(sample['time_end']/total_time).view(1)
         return sample
 def bulid_loader(Vedio_feature_path,train_ann_data_path,eval_ann_data_path,text_encoder_root,batch_size=16):
-    print('视频特征数据读取中....')
+    
     Vedio_features=torch.load(Vedio_feature_path)
-    print('训练集标注读取中....')
+    
     train_ann_data=pd.read_csv(train_ann_data_path)
-    print('测试集标注读取中....')
+    
     eval_ann_data=pd.read_csv(eval_ann_data_path)
-    print('数据读取完毕 开始构建dataset')
+    print('End')
     text_encoder=AutoTokenizer.from_pretrained(text_encoder_root)
 
     train_dataset=RELO_DataSet(Vedio_features=Vedio_features,ann_data=train_ann_data,text_encoder=text_encoder)
