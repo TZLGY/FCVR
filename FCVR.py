@@ -153,7 +153,7 @@ class Frames_Simlarity(nn.Module):
         all_cos_sim=torch.stack(all_cos_sim,dim=0)
         return all_cos_sim
 
-class ReLoCLNet(nn.Module):
+class FCVR(nn.Module):
     def __init__(self,args,text_feature_dim=512,video_feature_dim=512) -> None:
         super().__init__()
         self.args=args
